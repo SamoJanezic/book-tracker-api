@@ -17,8 +17,7 @@ function myCalculator($num01, $oper, $num02) {
   return $sum;
 }
 
-$num01 = $_GET["num01"];
-$oper = $_GET["oper"];
-$num02 = $_GET["num02"];
+$all = [$_GET["num01"], $_GET["oper"], $_GET["num02"]];
 
-echo "Value: " . myCalculator($num01, $oper, $num02);
+
+echo "Value: " . myCalculator($all[0], $all[1], $all[2]);
