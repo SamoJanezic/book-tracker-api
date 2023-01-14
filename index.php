@@ -1,21 +1,31 @@
 <?php
-//require 'test.php';
-// require "functions.php";
-$data= [
-    "id" => 1,
-    "title" => "Mistborn: the Final Empire",
-    "author" => "Brandon Sanderson",
-    "pages" => 560,
-    "publisher" => "Gollancz",
-    "publicationYear" => 2006,
-    "image" => "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1284167912l/944073.jpg"
-    ];
 
-    $nData = json_encode($data);
+require_once __DIR__. '/dbConfig.php';
 
-    $test = 'hello from php';
-    header("Content-Type: application/json");
-    echo $nData;
-//   echo $_GET["name"];
+class API {
+    function Select(){
+        $db = new Connect;
+        $books = [];
+        $data = $db->prepare('SELECT * FROM book ORDER BY id');
+        $data->execute();
+        while($OutputData = $data->fetch(PDO::FETCH_ASSOC)){
+            $books[$OutputData['id']] = [
+                'id' => $OutputData['id'],
+                'title' => $OutputData['title'],
+                'author' => $OutputData['author'],
+                'pages' => $OutputData['pages'],
+                'publisher' => $OutputData['publisher'],
+                'publicationYear' => $OutputData['publicationYear'],
+                'description' => $OutputData['description'],
+                'image' => $OutputData['image'],
+            ];
+        }
+        return json_encode($books);
+    }
+}
+
+$API = new API;
+header('Content-Type: application/json');
+echo $API->Select();
 
 ?>
