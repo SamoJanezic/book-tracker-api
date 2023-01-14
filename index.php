@@ -18,6 +18,7 @@ class API {
                 'publicationYear' => $OutputData['publicationYear'],
                 'description' => $OutputData['description'],
                 'image' => $OutputData['image'],
+                'series' => $OutputData['series']
             ];
         }
         return json_encode($books);
