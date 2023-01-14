@@ -1,21 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+//require 'test.php';
+// require "functions.php";
+$data= [
+    "id" => 1,
+    "title" => "Mistborn: the Final Empire",
+    "author" => "Brandon Sanderson",
+    "pages" => 560,
+    "publisher" => "Gollancz",
+    "publicationYear" => 2006,
+    "image" => "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1284167912l/944073.jpg"
+    ];
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    $nData = json_encode($data);
 
-<body>
-    
-    <?php
-    require 'test.php';
-    // require "functions.php";
+    $test = 'hello from php';
+    header("Content-Type: application/json");
+    echo $nData;
+//   echo $_GET["name"];
 
-    ?>
-
-</body>
-
-</html>
+?>
