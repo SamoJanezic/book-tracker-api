@@ -1,32 +1,13 @@
 <?php
-
-require_once __DIR__. '/dbConfig.php';
-
-class API {
-    function Select(){
-        $db = new Connect;
-        $books = [];
-        $data = $db->prepare('SELECT * FROM book ORDER BY id');
-        $data->execute();
-        while($OutputData = $data->fetch(PDO::FETCH_ASSOC)){
-            $books[$OutputData['id']] = [
-                'id' => $OutputData['id'],
-                'title' => $OutputData['title'],
-                'author' => $OutputData['author'],
-                'pages' => $OutputData['pages'],
-                'publisher' => $OutputData['publisher'],
-                'publicationYear' => $OutputData['publicationYear'],
-                'description' => $OutputData['description'],
-                'image' => $OutputData['image'],
-                'series' => $OutputData['series']
-            ];
-        }
-        return json_encode($books);
-    }
+require __DIR__ . "/inc/bootstrap.php";
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = explode( '/', $uri );
+if ((isset($uri[1]) && $uri[1] != 'book') || !isset($uri[2])) {
+    header("HTTP/1.1 404 Not Found");
+    exit();
 }
-
-$API = new API;
-header('Content-Type: application/json');
-echo $API->Select();
-
+require PROJECT_ROOT_PATH . "/Controller/Api/BookController.php";
+$objFeedController = new BookController();
+$strMethodName = $uri[2] . 'Action';
+$objFeedController->{$strMethodName}();
 ?>
