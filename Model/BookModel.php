@@ -6,4 +6,8 @@ class BookModel extends Database
     {
         return $this->select("SELECT * FROM book ORDER BY id ASC LIMIT ?", ["i", $limit]);
     }
+    public function getSingleBook($id)
+    {
+        return $this->select("SELECT * FROM book WHERE id = $id");
+    }
 }
