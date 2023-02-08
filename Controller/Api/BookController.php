@@ -15,9 +15,7 @@ class BookController extends BaseController
                 $intLimit = 10;
                 if (isset($arrQueryStringParams['limit']) && $arrQueryStringParams['limit']) {
                     $intLimit = $arrQueryStringParams['limit'];
-                    var_dump($intLimit);
                 }
-                // var_dump($arrQueryStringParams);
                 $arrBooks = $bookModel->getBooks($intLimit);
                 $responseData = json_encode($arrBooks);
             } catch (Error $e) {
@@ -48,10 +46,10 @@ class BookController extends BaseController
             if (strtoupper($requestMethod) == 'GET') {
                 try {
                     $bookModel = new BookModel();
-                    // $intLimit = 10;
-                    // if (isset($arrQueryStringParams['limit']) && $arrQueryStringParams['limit']) {
-                    //     $intLimit = $arrQueryStringParams['limit'];
-                    // }
+                    $id=1;
+                    if (isset($arrQueryStringParams['id']) && $arrQueryStringParams['id']) {
+                        $id = $arrQueryStringParams['id'];
+                    }
                     $singleBook = $bookModel->getSingleBook($id);
                     $responseData = json_encode($singleBook);
                 } catch (Error $e) {

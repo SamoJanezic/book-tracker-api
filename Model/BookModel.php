@@ -8,6 +8,6 @@ class BookModel extends Database
     }
     public function getSingleBook($id)
     {
-        return $this->select("SELECT * FROM book WHERE id = $id");
+        return $this->select("SELECT * FROM book WHERE id=?", ["i", $id]);
     }
 }
