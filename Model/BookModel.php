@@ -10,4 +10,24 @@ class BookModel extends Database
     {
         return $this->select("SELECT * FROM book WHERE id=?", ["i", $id]);
     }
+    public function deleteBook($id)
+    {
+        return $this->select("DELETE FROM book WHERE id=?", ["i", $id]);
+    }
+    public function addBook($title, $author, $description, $pages, $publicationYear, $image)
+    {
+        return $this->select("INSERT INTO book(title, author, description, pages, publicationYear, image)
+                              VALUES(%title, $author, $description, $pages, $publicationYear, $image)", ["i", $title, $author, $description, $pages, $publicationYear, $image]);
+    }
+    public function editBook($id, $title, $author, $description, $pages, $publicationYear, $image)
+    {
+        return $this->select("UPDATE book
+                              SET title = $title,
+                                  author = $author,
+                                  description = $description,
+                                  pages = $pages,
+                                  publicationYear = $publicationYear,
+                                  image = $image;
+                              WHERE $id");
+    }
 }
