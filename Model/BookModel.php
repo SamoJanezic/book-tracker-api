@@ -8,16 +8,17 @@ class BookModel extends Database
     }
     public function getSingleBook($id)
     {
-        return $this->select("SELECT * FROM book WHERE id=?", ["i", $id]);
+        return $this->select("SELECT * FROM book WHERE id=$id");
     }
     public function deleteBook($id)
     {
         return $this->select("DELETE FROM book WHERE id=?", ["i", $id]);
     }
-    public function addBook($title, $author, $description, $pages, $publicationYear, $image)
+    public function addBook($title, $author, $description, $pages, $publisher, $publicationYear, $image, $series)
     {
-        return $this->select("INSERT INTO book(title, author, description, pages, publicationYear, image)
-                              VALUES(%title, $author, $description, $pages, $publicationYear, $image)", ["i", $title, $author, $description, $pages, $publicationYear, $image]);
+        return $this->select("INSERT INTO book (id, title, author, description, pages, publisher, publicationYear, image, series)
+        VALUES(NULL, '$title', '$author', '$description', '$pages', '$publisher', '$publicationYear', '$image', '$series')");
+        //   ["i", $title, $author, $description, $pages, $publicationYear, $image]);
     }
     public function editBook($id, $title, $author, $description, $pages, $publicationYear, $image)
     {
@@ -26,6 +27,7 @@ class BookModel extends Database
                                   author = $author,
                                   description = $description,
                                   pages = $pages,
+                                  publisher = $publisher
                                   publicationYear = $publicationYear,
                                   image = $image;
                               WHERE $id");

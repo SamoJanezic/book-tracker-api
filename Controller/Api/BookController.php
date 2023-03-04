@@ -83,13 +83,8 @@ class BookController extends BaseController
         $arrQueryStringParams = $this->getQueryStringParams();
         if (strtoupper($requestMethod) == 'GET') { //!!! for deleting select GET method
             try {
-                $bookModel = new BookModel();
-                $id=1;
-                if (isset($arrQueryStringParams['id']) && $arrQueryStringParams['id']) {
-                    $id = $arrQueryStringParams['id'];
-                }
+                $id = $arrQueryStringParams['id'];
                 $bookModel->deleteBook($id);
-                // $responseData = json_encode($singleBook);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().' .Something went wrong! Please contact support.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
@@ -114,12 +109,15 @@ class BookController extends BaseController
     public function addAction()
     {
         $strErrorDesc = '';
-        $requestMethod = $_SERVER["REQUEST_METHOD"];
+        $requestMethod = $_SER-VER["REQUEST_METHOD"];
         $arrQueryStringParams = $this->getQueryStringParams();
         if (strtoupper($requestMethod) == 'POST') {
             try {
+
                 $bookModel = new BookModel();
-                $arrBooks = $bookModel->addBook($params); //! NEEDS TESTING
+                $params = $arrQueryStringParams;
+                ['title'=>$title, 'author'=>$author, 'description'=>$description, 'pages'=>$pages, 'publisher'=>$publisher, 'publicationYear'=>$publicationYear, 'image'=>$image, 'series'=>$series] = $params;
+                $arrBooks = $bookModel->addBook($title, $author, $description, $pages, $publisher, $publicationYear, $image, $series); 
                 $responseData = json_encode($arrBooks);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
