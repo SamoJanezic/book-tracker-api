@@ -109,7 +109,7 @@ class BookController extends BaseController
     public function addAction()
     {
         $strErrorDesc = '';
-        $requestMethod = $_SER-VER["REQUEST_METHOD"];
+        $requestMethod = $_SERVER["REQUEST_METHOD"];
         $arrQueryStringParams = $this->getQueryStringParams();
         if (strtoupper($requestMethod) == 'POST') {
             try {
@@ -117,7 +117,7 @@ class BookController extends BaseController
                 $bookModel = new BookModel();
                 $params = $arrQueryStringParams;
                 ['title'=>$title, 'author'=>$author, 'description'=>$description, 'pages'=>$pages, 'publisher'=>$publisher, 'publicationYear'=>$publicationYear, 'image'=>$image, 'series'=>$series] = $params;
-                $arrBooks = $bookModel->addBook($title, $author, $description, $pages, $publisher, $publicationYear, $image, $series); 
+                $arrBooks = $bookModel->addBook($title, $author, $description, $pages, $publisher, $publicationYear, $image, $series);
                 $responseData = json_encode($arrBooks);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
@@ -142,6 +142,35 @@ class BookController extends BaseController
 
     public function editAction()
     {
+        $strErrorDesc = '';
+        $requestMethod = $_SERVER["REQUEST_METHOD"];
+        $arrQueryStringParams = $this->getQueryStringParams();
+        if (strtoupper($requestMethod) == 'PUT') {
+            try {
 
+                $bookModel = new BookModel();
+                $params = $arrQueryStringParams;
+                ['id' => $id, 'title'=>$title, 'author'=>$author, 'description'=>$description, 'pages'=>$pages, 'publisher'=>$publisher, 'publicationYear'=>$publicationYear, 'image'=>$image, 'series'=>$series] = $params;
+                $arrBooks = $bookModel->editBook($id, $title, $author, $description, $pages, $publisher, $publicationYear, $image, $series);
+                $responseData = json_encode($arrBooks);
+            } catch (Error $e) {
+                $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
+                $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+            }
+        } else {
+            $strErrorDesc = 'Method not supported';
+            $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+        }
+        // send output
+        if (!$strErrorDesc) {
+            $this->sendOutput(
+                $responseData,
+                array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+            );
+        } else {
+            $this->sendOutput(json_encode(array('error' => $strErrorDesc)),
+                array('Content-Type: application/json', $strErrorHeader)
+            );
+        }
     }
 }

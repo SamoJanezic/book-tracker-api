@@ -20,16 +20,17 @@ class BookModel extends Database
         VALUES(NULL, '$title', '$author', '$description', '$pages', '$publisher', '$publicationYear', '$image', '$series')");
         //   ["i", $title, $author, $description, $pages, $publicationYear, $image]);
     }
-    public function editBook($id, $title, $author, $description, $pages, $publicationYear, $image)
+    public function editBook($id, $title, $author, $description, $pages, $publisher, $publicationYear, $image, $series)
     {
         return $this->select("UPDATE book
-                              SET title = $title,
-                                  author = $author,
-                                  description = $description,
-                                  pages = $pages,
-                                  publisher = $publisher
-                                  publicationYear = $publicationYear,
-                                  image = $image;
-                              WHERE $id");
+                              SET title = '$title',
+                              author = '$author',
+                              description = '$description',
+                              pages = '$pages',
+                              publisher = '$publisher',
+                              publicationYear = '$publicationYear',
+                              image = '$image',
+                              series = '$series'
+                              WHERE id='$id'");
     }
 }
