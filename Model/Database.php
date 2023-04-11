@@ -14,10 +14,10 @@ class Database
             throw new Exception($e->getMessage());
         }
     }
-    public function select($query = "" , $params = [])
+    public function select($query = "")
     {
         try {
-            $stmt = $this->executeStatement( $query , $params );
+            $stmt = $this->executeStatement($query);
             $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             $stmt->close();
             return $result;
@@ -25,6 +25,37 @@ class Database
             throw New Exception( $e->getMessage() );
         }
         return false;
+    }
+    public function delete($query = "")
+    {
+        try {
+            $stmt = $this->executeStatement($query);
+            $stmt->close();
+            return "Entry deleted successfully";
+        } catch(Exception $e) {
+            throw New Exception($e->getMessage());
+        }
+        return false;
+    }
+    public function insert($query = "")
+    {
+        try {
+            $stmt = $this->executeStatement($query);
+            $stmt->close();
+            return 'Entry added successfully';
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    public function update($query = "")
+    {
+        try {
+            $stmt = $this->executeStatement($query);
+            $stmt->close();
+            return 'Entry updated successfully';
+        } catch(Exception $e) {
+            throw New Exception($e->getMessage());
+        }
     }
     private function executeStatement($query = "" , $params = [])
     {
@@ -39,7 +70,7 @@ class Database
             $stmt->execute();
             return $stmt;
         } catch(Exception $e) {
-            throw New Exception( $e->getMessage() );
+            throw New Exception($e->getMessage());
         }
     }
 }

@@ -81,10 +81,12 @@ class BookController extends BaseController
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         $arrQueryStringParams = $this->getQueryStringParams();
-        if (strtoupper($requestMethod) == 'GET') { //!!! for deleting select GET method
+        if (strtoupper($requestMethod) == 'DELETE') {
             try {
+                $bookModel = new BookModel();
                 $id = $arrQueryStringParams['id'];
-                $bookModel->deleteBook($id);
+                $delBook = $bookModel->deleteBook($id);
+                $responseData = json_encode($delBook);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().' .Something went wrong! Please contact support.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
@@ -113,9 +115,8 @@ class BookController extends BaseController
         $arrQueryStringParams = $this->getQueryStringParams();
         if (strtoupper($requestMethod) == 'POST') {
             try {
-
                 $bookModel = new BookModel();
-                $params = $arrQueryStringParams;
+                $params = $_POST;
                 ['title'=>$title, 'author'=>$author, 'description'=>$description, 'pages'=>$pages, 'publisher'=>$publisher, 'publicationYear'=>$publicationYear, 'image'=>$image, 'series'=>$series] = $params;
                 $arrBooks = $bookModel->addBook($title, $author, $description, $pages, $publisher, $publicationYear, $image, $series);
                 $responseData = json_encode($arrBooks);
@@ -147,11 +148,10 @@ class BookController extends BaseController
         $arrQueryStringParams = $this->getQueryStringParams();
         if (strtoupper($requestMethod) == 'PUT') {
             try {
-
+                $_PUT = file_get_contents('php://input');
+                $params = json_decode($_PUT);
                 $bookModel = new BookModel();
-                $params = $arrQueryStringParams;
-                ['id' => $id, 'title'=>$title, 'author'=>$author, 'description'=>$description, 'pages'=>$pages, 'publisher'=>$publisher, 'publicationYear'=>$publicationYear, 'image'=>$image, 'series'=>$series] = $params;
-                $arrBooks = $bookModel->editBook($id, $title, $author, $description, $pages, $publisher, $publicationYear, $image, $series);
+                $arrBooks = $bookModel->editBook($params->id, $params->title, $params->author, $params->description, $params->pages, $params->publisher, $params->publicationYear, $params->image, $params->series);
                 $responseData = json_encode($arrBooks);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
