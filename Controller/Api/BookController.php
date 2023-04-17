@@ -13,12 +13,18 @@ class BookController extends BaseController
         $arrQueryStringParams = $this->getQueryStringParams();
         if (strtoupper($requestMethod) == 'GET') {
             try {
+                // var_dump($arrQueryStringParams);
+                // die;
                 $bookModel = new BookModel();
                 $intLimit = 10;
+                $intOffset = 0;
                 if (isset($arrQueryStringParams['limit']) && $arrQueryStringParams['limit']) {
                     $intLimit = $arrQueryStringParams['limit'];
                 }
-                $arrBooks = $bookModel->getBooks($intLimit);
+                if (isset($arrQueryStringParams['offset']) && $arrQueryStringParams['offset']) {
+                    $intOffset = $arrQueryStringParams['offset'];
+                }
+                $arrBooks = $bookModel->getBooks($intLimit, $intOffset);
                 $responseData = json_encode($arrBooks);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';

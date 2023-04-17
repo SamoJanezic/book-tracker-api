@@ -14,10 +14,10 @@ class Database
             throw new Exception($e->getMessage());
         }
     }
-    public function select($query = "")
+    public function select($query = "" , $params = [])
     {
         try {
-            $stmt = $this->executeStatement($query);
+            $stmt = $this->executeStatement( $query , $params );
             $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             $stmt->close();
             return $result;
@@ -26,10 +26,10 @@ class Database
         }
         return false;
     }
-    public function delete($query = "")
+    public function delete($query = "", $params = [])
     {
         try {
-            $stmt = $this->executeStatement($query);
+            $stmt = $this->executeStatement($query, $params);
             $stmt->close();
             return "Entry deleted successfully";
         } catch(Exception $e) {
@@ -37,20 +37,20 @@ class Database
         }
         return false;
     }
-    public function insert($query = "")
+    public function insert($query = "", $params = [])
     {
         try {
-            $stmt = $this->executeStatement($query);
+            $stmt = $this->executeStatement($query, $params);
             $stmt->close();
             return 'Entry added successfully';
         } catch(Exception $e) {
             throw new Exception($e->getMessage());
         }
     }
-    public function update($query = "")
+    public function update($query = "", $params = [])
     {
         try {
-            $stmt = $this->executeStatement($query);
+            $stmt = $this->executeStatement($query, $params);
             $stmt->close();
             return 'Entry updated successfully';
         } catch(Exception $e) {
@@ -60,12 +60,16 @@ class Database
     private function executeStatement($query = "" , $params = [])
     {
         try {
+            // var_dump($query, $params);
+            // die;
             $stmt = $this->connection->prepare( $query );
             if($stmt === false) {
                 throw New Exception("Unable to do prepared statement: " . $query);
             }
             if( $params ) {
-                $stmt->bind_param($params[0], $params[1]);
+                // var_dump($params);
+                // die;
+                $stmt->bind_param(...$params);
             }
             $stmt->execute();
             return $stmt;
